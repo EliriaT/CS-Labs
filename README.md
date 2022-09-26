@@ -13,4 +13,4 @@
 
 ## Laboratory work tasks
 
-[Laboratory Work #1](https://github.com/DrVasile/CS-Labs)
+[Laboratory Work #1](https://github.com/EliriaT/CS-Labs/tree/main/Lab1)
