@@ -29,7 +29,7 @@ An improvement to the Caesar Cypher is to try permute the alphabet before tranpo
 
 Vigenere cypher is an improvement of the last two, because it is a polyalphabetic cypher. It uses two letters to generete the encrypted letter. It makes use of a key, and then the key is repeated till the length of the plaintext. The encrypted letter is the result of summing the letter of the key at position i, plus the the letter of plaintext at position i modulo 26.
 
-Playfair cypher is a digraph substitution which encrypts digraphs, in each iteration
+Playfair cypher is a digraph substitution which encrypts digraphs in each iteration, instead of single letters.It initially creates a key-table of 5 * 5 matrix. The matrix contains alphabets that act as the key for encryption of the plaintext. Note that any alphabet should not be repeated. Another point to note that there are 26 alphabets and we have only 25 blocks to put a letter inside it. Therefore, one letter is excess so, a letter will be omitted (usually J) from the matrix. Nevertheless, the plaintext contains J, then J is replaced by I. It means treat I and J as the same letter, accordingly.
 
 
 ## Objectives:
@@ -47,19 +47,51 @@ Playfair cypher is a digraph substitution which encrypts digraphs, in each itera
 
 ## Implementation description
 
-* About 2-3 sentences to explain each piece of the implementation.
+1. Each implementation is contained inside a struct definition (like a class), and generally have a key attribute which can either be a string or an int depending of the algorithm itself. Each implementation implements the cipher interface with defines the Encrypt() and Decrypt() methods as well as Name() for returning struct's name. The implementations are located inside a `implementations` package. The methods Encrypt(), Decrypt() and Name() are public, visible outside the package, inside the main package, because the start with the capital letter. The private identifiers start with non-capital language in golang. 
 
-
-* Code snippets from your files.
-
+```golang
+type Cipher interface {
+	Encrypt(text string) string
+	Decrypt(text string) string
+	Name() string
+}
 ```
-public static void main() 
-{
+In golang, structs implement interfaces implicitly.
+Each struct is associated with a function `Make_class_name_*`, which creates and returns an instance of that struct. This is done to simulate the constructor in golang. For Example: 
 
+```golang
+// acts like a constructor
+func MakeCaesarCipher() CaesarCipher {
+	return CaesarCipher{alphabet: []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")}
 }
 ```
 
-* If needed, screenshots.
+In main.go, there is a loop that iterates through a list of objects of the Cipher interface type. Then just the Encrypt() and Decrypt() methods of the struct are called.
+
+```golang
+for i, cipher := range cipherList {
+		fmt.Println(i+1, ") ", "Encrypted using: ", cipher.Name())
+		encryptedMessage := cipher.Encrypt("Hi. This message is veeeryyy secret")
+		fmt.Println("The encrypted message: ", encryptedMessage)
+		decryptedMessage := cipher.Decrypt(encryptedMessage)
+		fmt.Println("The decrypted message: ", decryptedMessage)
+	}
+```
+
+2. Caesar cipher
+
+This struct uses the same struct function to encrypt and decrypt the key. The only difference is that for decryption, the -key is passed as an argument.
+
+```
+func (c CaesarCipher) Encrypt(text string) string {
+	return convertText(text, c.key, c.alphabet)
+}
+func (c CaesarCipher) Decrypt(text string) string {
+	return convertText(text, -c.key, c.alphabet)
+}
+```
+
+
 
 
 ## Conclusions / Screenshots / Results
