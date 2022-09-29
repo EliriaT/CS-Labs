@@ -34,6 +34,10 @@ func (v VigenereCipher) Decrypt(text string) string {
 	return string(out)
 }
 
+func (v VigenereCipher) Name() string {
+	return "Vigenere Cipher"
+}
+
 func cleanString(in string) string {
 	out := []rune{}
 	for _, v := range in {

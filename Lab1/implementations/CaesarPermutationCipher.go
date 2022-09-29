@@ -1,7 +1,6 @@
 package implementations
 
 import (
-	"fmt"
 	"golang.org/x/exp/slices"
 	"math/rand"
 )
@@ -50,12 +49,16 @@ func (c CaesarPermutationCipher) Decrypt(text string) string {
 	return string(runesText)
 }
 
+func (c CaesarPermutationCipher) Name() string {
+	return "Caesar Cipher with Permutation"
+}
+
 // acts like a constructor
 func MakeCaesarPermutationCipher() CaesarPermutationCipher {
 	alphabet := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	rand.Shuffle(len(alphabet), func(i, j int) {
 		alphabet[i], alphabet[j] = alphabet[j], alphabet[i]
 	})
-	fmt.Println(string(alphabet))
+
 	return CaesarPermutationCipher{alphabet: alphabet}
 }

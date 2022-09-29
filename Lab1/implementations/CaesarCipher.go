@@ -14,6 +14,9 @@ func (c CaesarCipher) Encrypt(text string) string {
 func (c CaesarCipher) Decrypt(text string) string {
 	return convertText(text, -c.key, c.alphabet)
 }
+func (c CaesarCipher) Name() string {
+	return "Caesar Cipher"
+}
 
 func convertText(text string, key int, alpha []rune) string {
 

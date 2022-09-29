@@ -22,11 +22,15 @@ func main() {
 	vigenereCipher := implementations.MakeVigenereCipher("thisisasamplekey")
 	cipherList = append(cipherList, vigenereCipher)
 
-	for _, cipher := range cipherList {
-		encryptedMessage := cipher.Encrypt("Hello. This message is encrypted.")
-		fmt.Println(encryptedMessage)
+	playfairCipher := implementations.MakePlayfairCipher("thisisasamplekey")
+	cipherList = append(cipherList, playfairCipher)
+
+	for i, cipher := range cipherList {
+		fmt.Println(i+1, ") ", "Encrypted using: ", cipher.Name())
+		encryptedMessage := cipher.Encrypt("Hi. This message is veeeryyy secret")
+		fmt.Println("The encrypted message: ", encryptedMessage)
 		decryptedMessage := cipher.Decrypt(encryptedMessage)
-		fmt.Println(decryptedMessage)
+		fmt.Println("The decrypted message: ", decryptedMessage)
 	}
 
 }
