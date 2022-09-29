@@ -47,7 +47,8 @@ Playfair cypher is a digraph substitution which encrypts digraphs in each iterat
 
 ## Implementation description
 
-1. Each implementation is contained inside a struct definition (like a class), and generally have a key attribute which can either be a string or an int depending of the algorithm itself. Each implementation implements the cipher interface with defines the Encrypt() and Decrypt() methods as well as Name() for returning struct's name. The implementations are located inside a `implementations` package. The methods Encrypt(), Decrypt() and Name() are public, visible outside the package, inside the main package, because the start with the capital letter. The private identifiers start with non-capital language in golang. 
+## 1. General notes
+Each implementation is contained inside a struct definition (like a class), and has a key attribute which can either be a string or an int depending of the algorithm itself. Each implementation implements the cipher interface with defines the Encrypt() and Decrypt() methods as well as Name() for returning struct's name. The implementations are located inside a `implementations` package. The methods Encrypt(), Decrypt() and Name() are public, visible outside the package, inside the main package, because they start with the capital letter. The private identifiers start with non-capital letter in golang. 
 
 ```golang
 type Cipher interface {
@@ -78,9 +79,9 @@ for i, cipher := range cipherList {
 	}
 ```
 
-2. Caesar cipher
+## 2. Caesar cipher
 
-This struct uses the same struct function to encrypt and decrypt the key. The only difference is that for decryption, the -key is passed as an argument.
+This struct uses the same function for encryption and decryption. The only difference is that for decryption, the -key is passed as an argument.
 
 ```
 func (c CaesarCipher) Encrypt(text string) string {
@@ -90,9 +91,113 @@ func (c CaesarCipher) Decrypt(text string) string {
 	return convertText(text, -c.key, c.alphabet)
 }
 ```
+In this algorithm each letter of the plaintext is encrypted according to a formula, taking intro consideration the shift in the alphabet. The formula is simple:
 
+```golang
+if char >= 'A' && char <= 'Z' {
+			letter := char + s - 'A'
+			ind := (letter%26 + 26) % 26
+			runesText[i] = alpha[ind]
+		}
+```
 
+## 3. Caesar cipher with permutation of the alphabet
 
+The key difference here from the simple Caesar cipher is that we shuffle the letters:
+```golang
+func MakeCaesarPermutationCipher() CaesarPermutationCipher {
+	alphabet := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	rand.Shuffle(len(alphabet), func(i, j int) {
+		alphabet[i], alphabet[j] = alphabet[j], alphabet[i]
+	})
+
+	return CaesarPermutationCipher{alphabet: alphabet}
+}
+```
+And the decryption algorithm is a little bit different,because we have to take into account the shuffled alphabet as well as the key shift.
+```golang
+idx := slices.IndexFunc(c.alphabet, func(c rune) bool { return c == char })
+			letter := rune(idx) + s
+			ind := (letter%26 + 26) % 26
+			runesText[i] = ind + 'A'
+```
+## 4. Vigenere cipher
+In this cipher it is needed to clean the plaintext of all whitespaces. As a result only the capital letters remain in the plaintext.
+
+```golang
+func cleanString(in string) string {
+	out := []rune{}
+	for _, v := range in {
+		if 65 <= v && v <= 90 {
+			out = append(out, v)
+		} else if 97 <= v && v <= 122 {
+			out = append(out, v-32)
+		}
+	}
+
+	return string(out)
+}
+```
+For encryption and decryption a simple formula is used, with the difference in the operand. When we encrypt we add the key letter with the plaintext letter, when we decrypt we substract. 
+```golang
+func (v VigenereCipher) encodeChar(a, b rune) rune {
+	return (((a - 'A') + (b - 'A')) % 26) + 'A'
+}
+func (v VigenereCipher) decodeChar(a, b rune) rune {
+	return ((((a - 'A') - (b - 'A')) + 26) % 26) + 'A'
+}
+```
+The encryption and decryption is done letter by letter.
+
+## 5. Playfair cipher
+
+Playfair cipher is a more complex one in terms of implementation. First of all we have to clean the string with the `cleanString()` function. We replace all `J` with `I` in the key. Then we have to generate the cipher table (key table), in such way that the letters are repeated only once. For this we concatenate the key with the alphabet, and then copy only the unique values in the table.
+
+```golang
+keyString := p.key + "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+
+	for k := 0; k < len(keyString); k++ {
+		repeat := false
+		used := false
+		for i := 0; i < 5; i++ {
+			for j := 0; j < 5; j++ {
+				if p.table[i][j] == string(keyString[k]) {
+					repeat = true
+				} else if p.table[i][j] == "" && !repeat && !used {
+					p.table[i][j] = "" + string(keyString[k])
+					used = true
+				}
+			}
+		}
+	}
+}
+```
+Then the plaintext is divided intro digraphs, in such way that no two letters are the same and X is added where neccessary.
+```golang
+	for i := 0; i < (length - 1); i++ {
+
+		if text[2*i] == text[2*i+1] {
+			text = text[:2*i+1] + "X" + text[2*i+1:]
+
+			length = len(text)/2 + len(text)%2
+		}
+	}
+
+	digraph := make([]string, length, length)
+
+	for j := 0; j < length; j++ {
+		if (j == length-1) && (len(text)/2 == length-1) {
+			text = text + "X"
+		}
+		digraph[j] = string(text[2*j]) + string(text[2*j+1])
+	}
+```
+Then each digraph is encrypted according the encoded digraphs. The decryption procedure is the same as encryption but the steps are applied in reverse order. 
 
 ## Conclusions / Screenshots / Results
+
+Classical Cyphers were an important step in the development of the cryptography. It provided means for securing communication in the past. Nowadays they are considered not secure, because they can be broken by brute force or such means as frequency analysis. Here are the results obtained in this laboratory work:
+
+
+![image](https://user-images.githubusercontent.com/67596753/193137728-a7c2b8a5-9abb-4e56-acf7-bf0c1b68ecb3.png)
 
