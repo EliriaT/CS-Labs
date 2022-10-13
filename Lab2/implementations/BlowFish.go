@@ -14,22 +14,32 @@ type Blowfish struct {
 // Note that for amounts of data larger than a block,
 // it is not safe to just call Encrypt on successive blocks;
 // instead, use an encryption mode like CBC (see crypto/cipher/cbc.go).
-func (c *Blowfish) Encrypt(dst, src []byte) {
+func (c *Blowfish) Encrypt(src []byte) ([]byte, error) {
+	var dst []byte
+	dst = make([]byte, 8)
+
 	l := uint32(src[0])<<24 | uint32(src[1])<<16 | uint32(src[2])<<8 | uint32(src[3])
 	r := uint32(src[4])<<24 | uint32(src[5])<<16 | uint32(src[6])<<8 | uint32(src[7])
 	l, r = encryptBlock(l, r, c)
 	dst[0], dst[1], dst[2], dst[3] = byte(l>>24), byte(l>>16), byte(l>>8), byte(l)
 	dst[4], dst[5], dst[6], dst[7] = byte(r>>24), byte(r>>16), byte(r>>8), byte(r)
+
+	return dst, nil
 }
 
 // Decrypt decrypts the 8-byte buffer src using the key k
 // and stores the result in dst.
-func (c *Blowfish) Decrypt(dst, src []byte) {
+func (c *Blowfish) Decrypt(src []byte) ([]byte, error) {
+	var dst []byte
+	dst = make([]byte, 8)
+
 	l := uint32(src[0])<<24 | uint32(src[1])<<16 | uint32(src[2])<<8 | uint32(src[3])
 	r := uint32(src[4])<<24 | uint32(src[5])<<16 | uint32(src[6])<<8 | uint32(src[7])
 	l, r = decryptBlock(l, r, c)
 	dst[0], dst[1], dst[2], dst[3] = byte(l>>24), byte(l>>16), byte(l>>8), byte(l)
 	dst[4], dst[5], dst[6], dst[7] = byte(r>>24), byte(r>>16), byte(r>>8), byte(r)
+
+	return dst, nil
 }
 
 func (c *Blowfish) Name() string {
@@ -43,7 +53,7 @@ func (k KeySizeError) Error() string {
 }
 
 // NewCipher creates and returns a  Blowfish cipher.
-// The key argument should be the Blowfish key, from 1 to 56 bytes.
+// The key argument should be the Blowfish key, from 4 to 56 bytes.
 func NewBlowfish(key []byte) (*Blowfish, error) {
 	var result Blowfish
 	if k := len(key); k < 1 || k > 56 {

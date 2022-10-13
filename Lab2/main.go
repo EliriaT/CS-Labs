@@ -1,29 +1,51 @@
 package main
 
+import (
+	"encoding/base64"
+	"fmt"
+	"github.com/EliriaT/CS-Labs/Lab1/implementations"
+	"log"
+	"math/rand"
+	"time"
+)
+
 func main() {
-	//rand.Seed(time.Now().UnixNano())
-	//cipherList := make([]Cipher, 0)
-	//
-	//caesarCipher := implementations.MakeCaesarCipher()
-	//caesarCipher.SetKey(4)
-	//cipherList = append(cipherList, caesarCipher)
-	//
-	//caesarPermutationCipher := implementations.MakeCaesarPermutationCipher()
-	//caesarPermutationCipher.SetKey(0)
-	//cipherList = append(cipherList, caesarPermutationCipher)
-	//
-	//vigenereCipher := implementations.MakeVigenereCipher("thisisasamplekey")
-	//cipherList = append(cipherList, vigenereCipher)
-	//
-	//playfairCipher := implementations.MakePlayfairCipher("thisisasamplekey")
-	//cipherList = append(cipherList, playfairCipher)
-	//
-	//for i, cipher := range cipherList {
-	//	fmt.Println(i+1, ") ", "Encrypted using: ", cipher.Name())
-	//	encryptedMessage := cipher.Encrypt("Hi. This message is veeeryyy secret")
-	//	fmt.Println("The encrypted message: ", encryptedMessage)
-	//	decryptedMessage := cipher.Decrypt(encryptedMessage)
-	//	fmt.Println("The decrypted message: ", decryptedMessage)
-	//}
+	rand.Seed(time.Now().UnixNano())
+	//The list composed of objects that correspond to the Cipher interface
+	cipherList := make([]Cipher, 0)
+
+	//the 8 bytes long key for Blowfish
+	keyBlowfish := []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF}
+	//It returns a Blowfish object
+	blowfishCipher, err := implementations.NewBlowfish(keyBlowfish)
+	if err != nil {
+		log.Panicf("blowfishCipher error( %d bytes) = %s", len(keyBlowfish), err)
+	}
+
+	cipherList = append(cipherList, blowfishCipher)
+
+	//initializing the list of 16*2048 bytes for the otp key. Each page of pad the  will be of size 16 bytes, in total 2048 pages
+	keyOTP := make([]byte, 16*2048)
+	//Generating random bits
+	rand.Read(keyOTP)
+	//It returns a new OTP object , and sets the page to 1
+	otpCipher, err := implementations.NewPad(keyOTP, 16, 1)
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+
+	cipherList = append(cipherList, otpCipher)
+
+	//64 bits message, "iamirina"
+	Message := []byte{0x69, 0x61, 0x6d, 0x69, 0x72, 0x69, 0x6e, 0x61}
+
+	for i, cipher := range cipherList {
+		fmt.Println(i+1, ") ", "Encrypted using: ", cipher.Name())
+		encryptedMessage, _ := cipher.Encrypt(Message)
+		fmt.Println("The encrypted message: ", base64.StdEncoding.EncodeToString(encryptedMessage))
+		decryptedMessage, _ := cipher.Decrypt(encryptedMessage)
+		fmt.Println("The decrypted message: ", string(decryptedMessage))
+	}
 
 }

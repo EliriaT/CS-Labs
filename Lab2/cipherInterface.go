@@ -1,7 +1,7 @@
 package main
 
 type Cipher interface {
-	Encrypt(text string) string
-	Decrypt(text string) string
+	Encrypt(src []byte) ([]byte, error)
+	Decrypt(src []byte) ([]byte, error)
 	Name() string
 }
