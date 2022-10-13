@@ -3,7 +3,8 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/EliriaT/CS-Labs/Lab1/implementations"
+	"github.com/EliriaT/CS-Labs/Lab1/implementations/blowfish"
+	"github.com/EliriaT/CS-Labs/Lab1/implementations/oneTimePad"
 	"log"
 	"math/rand"
 	"time"
@@ -17,7 +18,7 @@ func main() {
 	//the 8 bytes long key for Blowfish
 	keyBlowfish := []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF}
 	//It returns a Blowfish object
-	blowfishCipher, err := implementations.NewBlowfish(keyBlowfish)
+	blowfishCipher, err := blowfish.NewBlowfish(keyBlowfish)
 	if err != nil {
 		log.Panicf("blowfishCipher error( %d bytes) = %s", len(keyBlowfish), err)
 	}
@@ -29,7 +30,7 @@ func main() {
 	//Generating random bits
 	rand.Read(keyOTP)
 	//It returns a new OTP object , and sets the page to 1
-	otpCipher, err := implementations.NewPad(keyOTP, 16, 1)
+	otpCipher, err := oneTimePad.NewPad(keyOTP, 16, 1)
 	if err != nil {
 		fmt.Printf("%s", err)
 		return

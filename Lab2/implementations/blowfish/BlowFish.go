@@ -1,6 +1,8 @@
-package implementations
+package blowfish
 
-import "strconv"
+import (
+	"strconv"
+)
 
 const BlockSize = 8
 

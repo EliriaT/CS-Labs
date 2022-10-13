@@ -1,4 +1,4 @@
-package implementations
+package blowfish
 
 // The startup permutation array and substitution boxes.
 // They are the hexadecimal digits of PI; see:

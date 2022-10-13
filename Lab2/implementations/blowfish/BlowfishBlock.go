@@ -1,4 +1,4 @@
-package implementations
+package blowfish
 
 //	it performs the Blowfish algorithm's key schedule which sets up the *Blowfish's
 //
