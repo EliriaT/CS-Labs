@@ -14,3 +14,4 @@
 ## Laboratory work tasks
 
 [Laboratory Work #1](https://github.com/EliriaT/CS-Labs/tree/main/Lab1)
+[Laboratory Work #2](https://github.com/EliriaT/CS-Labs/tree/main/Lab2)
