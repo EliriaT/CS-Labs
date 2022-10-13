@@ -173,15 +173,15 @@ When a message is to be sent, the sender uses the secret key to encrypt each cha
 
 
 
-For encryption and decryption a simple formula is used, with the difference in the operand. When we encrypt we add the key letter with the plaintext letter, when we decrypt we substract Then the modular operation is done. 
+For encryption and decryption a simple formula is used, with the difference in the operand. When we encrypt we add the key letter or a key bit with the plaintext letter/bit, when we decrypt we substract Then the modular operation is done. 
 
 ```golang
 cipherText := (plainText + secretKey) % 255
 		result[i] = byte(cipherText)
 plainText := (cipherText - secretKey) % 255
-		if plainText < 0 {
-			plainText += 255
-		}
+if plainText < 0 {
+	plainText += 255
+}
 ```
 The encryption and decryption is done in a stream, byte by byte. In this implementation an initial slice of random bits is used to creat the random key pad. This pad consists of n pages. We set the number of pages and the  initial page we start from. For a single message , a single same page is used for encryption and decryption. If we want to encrypt another message, the used must call the `NextPage()` message. Here it is how the pad and pages in  the pad are formed:
 ```golang
