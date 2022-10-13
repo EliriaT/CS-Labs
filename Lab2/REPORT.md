@@ -67,7 +67,7 @@ type Cipher interface {
 }
 ```
 In golang, structs implement interfaces implicitly.
-Each struct is associated with a function `Make_class_name_*`, which creates and returns an instance of that struct. This is done to simulate the constructor in golang. For Example: 
+Each struct is associated with a function `New_class_name_*`, which creates and returns an instance of that struct. This is done to simulate the constructor in golang. For Example: 
 
 ```golang
 // acts like a constructor
