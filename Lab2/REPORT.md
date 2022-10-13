@@ -172,8 +172,9 @@ When a message is to be sent, the sender uses the secret key to encrypt each cha
 
 
 
-```
+
 For encryption and decryption a simple formula is used, with the difference in the operand. When we encrypt we add the key letter with the plaintext letter, when we decrypt we substract Then the modular operation is done. 
+
 ```golang
 cipherText := (plainText + secretKey) % 255
 		result[i] = byte(cipherText)
