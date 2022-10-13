@@ -54,7 +54,7 @@ func (k KeySizeError) Error() string {
 	return "invalid key size for blowfish" + strconv.Itoa(int(k))
 }
 
-// NewCipher creates and returns a  Blowfish cipher.
+// NewBlowfish creates and returns a  Blowfish cipher.
 // The key argument should be the Blowfish key, from 4 to 56 bytes.
 func NewBlowfish(key []byte) (*Blowfish, error) {
 	var result Blowfish
