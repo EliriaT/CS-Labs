@@ -57,7 +57,7 @@
 ## Implementation description
 
 ## 1. General notes
-Each implementation is contained inside a struct definition (like a class). Each implementation implements the cipher interface wich defines the Encrypt() and Decrypt() methods as well as Name() for returning struct's name. The implementations are located inside a `implementations` package. The methods Encrypt(), Decrypt() and Name() are public, visible outside the package, inside the main package, because they start with the capital letter. The private identifiers start with non-capital letter in golang. 
+Each implementation is contained inside a struct definition (like a class). Each implementation implements the cipher interface which defines the Encrypt() and Decrypt() methods as well as Name() for returning struct's name. The implementations are located inside a `implementations` package. The methods Encrypt(), Decrypt() and Name() are public, visible outside the package, inside the main package, because they start with the capital letter. The private identifiers start with non-capital letter in golang. 
 
 ```golang
 type Cipher interface {
