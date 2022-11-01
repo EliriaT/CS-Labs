@@ -16,3 +16,4 @@
 [Laboratory Work #1](https://github.com/EliriaT/CS-Labs/tree/main/classicCipher)
 
 [Laboratory Work #2](https://github.com/EliriaT/CS-Labs/tree/main/streamBlockCipher)
+
