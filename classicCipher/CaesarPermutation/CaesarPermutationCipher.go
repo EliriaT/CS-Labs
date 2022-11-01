@@ -1,4 +1,4 @@
-package implementations
+package CaesarPermutation
 
 import (
 	"golang.org/x/exp/slices"

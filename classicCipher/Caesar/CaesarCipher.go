@@ -1,4 +1,4 @@
-package implementations
+package Caesar
 
 type CaesarCipher struct {
 	key      int

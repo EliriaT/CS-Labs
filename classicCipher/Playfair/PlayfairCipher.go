@@ -1,7 +1,8 @@
-package implementations
+package Playfair
 
 import (
 	"fmt"
+	"github.com/EliriaT/CS-Labs/classicCipher/implementations"
 	"strings"
 )
 
@@ -15,7 +16,7 @@ func (p *PlayfairCipher) SetKey(key string) {
 }
 
 func (p *PlayfairCipher) ParseKey(key string) {
-	key = cleanString(key)
+	key = implementations.cleanString(key)
 	key = strings.Replace(key, "J", "I", -1)
 	p.key = key
 
@@ -42,7 +43,7 @@ func (p *PlayfairCipher) makeCipherTable() {
 
 func (p PlayfairCipher) Encrypt(text string) string {
 
-	text = cleanString(text)
+	text = implementations.cleanString(text)
 	length := len(text)/2 + len(text)%2
 
 	for i := 0; i < (length - 1); i++ {

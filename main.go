@@ -3,8 +3,9 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/EliriaT/CS-Labs/Lab1/implementations/blowfish"
-	"github.com/EliriaT/CS-Labs/Lab1/implementations/oneTimePad"
+	"github.com/EliriaT/CS-Labs/streamBlockCipher/blowfish"
+	"github.com/EliriaT/CS-Labs/streamBlockCipher/cipherInterface"
+	"github.com/EliriaT/CS-Labs/streamBlockCipher/oneTimePad"
 	"log"
 	"math/rand"
 	"time"
@@ -13,7 +14,7 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	//The list composed of objects that correspond to the Cipher interface
-	cipherList := make([]Cipher, 0)
+	cipherList := make([]cipherInterface.Cipher, 0)
 
 	//the 8 bytes long key for Blowfish
 	keyBlowfish := []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF}

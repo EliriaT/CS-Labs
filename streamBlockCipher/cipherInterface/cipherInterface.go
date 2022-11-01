@@ -1,4 +1,4 @@
-package main
+package cipherInterface
 
 type Cipher interface {
 	Encrypt(src []byte) ([]byte, error)

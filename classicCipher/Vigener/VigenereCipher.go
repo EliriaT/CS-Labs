@@ -1,4 +1,4 @@
-package implementations
+package Vigener
 
 type VigenereCipher struct {
 	key string
