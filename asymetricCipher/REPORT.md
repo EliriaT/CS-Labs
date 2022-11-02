@@ -6,7 +6,7 @@
 ----
 
 ## Theory
-&ensp;&ensp;&ensp; Asymmetric Cryptography (a.k.a. Public-Key Cryptography)deals with the encryption of plain text when having 2 keys, one being public and the other one private. The keys form a pair and despite being different they are related.
+&ensp;&ensp;&ensp; Asymmetric Cryptography (a.k.a. Public-Key Cryptography) deals with the encryption of plain text when having 2 keys, one being public and the other one private. The keys form a pair and despite being different they are related.
 
 &ensp;&ensp;&ensp; As the name implies, the public key is available to the public but the private one is available only to the authenticated recipients. 
 
@@ -90,7 +90,7 @@ func (pk *PublicKey) setPublicKey() {
 
 ```
 
-The next step is to compute the public key pair `(N,E)`. Also `phi` function is calculated as the product of `phi = (p - 1) * (q - 1)` . `N` is `N = p * q`, and `E` should be `E>1` and `E<phi`, and it should be coprime with `phi` and `N`. For ensuring that they are coprimes, I used a simple function name `gcd` for calculating the greatest commmon divisor of two numbers. Two numbers are coprime when their greatest common divisor is 1. Thus in this case, 
+The next step is to compute the public key pair `(N,E)`. Also `phi` function is calculated as the product of `phi = (p - 1) * (q - 1)` . `N` is `N = p * q`, and `E` should be `E>1` and `E<phi`, and it should be coprime with `phi` and `N`. For ensuring that they are coprimes, I used a simple function named `gcd` for calculating the greatest commmon divisor of two numbers. Two numbers are coprime when their greatest common divisor is 1. Thus in this case, 
 `gcd(E, phi) == 1 && gcd(E, N) == 1` .
 
 ```golang
@@ -135,8 +135,8 @@ func modInverse(a int64, m int64) int64 {
 	return 0
 }
 ```
-The RSA struct implements the `Encrypt(src []byte) ([]int64, error)` and `Decrypt(src []int64) ([]byte, error)` methods of the Cipher interface.  The encryption is done using the public key pair `(E,N)` the formula:  $$m^e mod N $$ . The decryption is done using the private key `d`, and public `N`:
-$$m^d mod N $$ . 
+The RSA struct implements the `Encrypt(src []byte) ([]int64, error)` and `Decrypt(src []int64) ([]byte, error)` methods of the Cipher interface.  The encryption is done using the public key pair `(E,N)` and the formula:  $$m^e mod N $$  The decryption is done using the private key `d`, and public `N`:
+$$m^d mod N $$  
 
 ```golang
 func (r RSA) Encrypt(src []byte) ([]int64, error) {
@@ -160,7 +160,7 @@ func (r RSA) Decrypt(src []int64) ([]byte, error) {
 	return decBytes, nil
 }
 ```
-The Encrypt method receives a list of bytes. Firtly a string message m is transformed to a list of bytes on the client side.
+The Encrypt method receives a list of bytes. Firstly a string message m is transformed to a list of bytes on the client side.
 
 ```golang
 Message := []byte("i am irina.")
@@ -170,7 +170,7 @@ Encryption of a message is done byte by byte. Each byte is encrypted separetely,
 The decryption is done similary. `src`  is a list of encrypted numbers given as input to the `Decrypt` method. Each number from the `src` is decrypted in the loop, using the previously mentioned formula and appended to the `decBytes`. The client then converts the decrypted list of bytes to the string format:
 `string(decryptedMessage)` . The Exp() method from `big.Int` built-in package is used to calculate fast  `a ** b mod m` .
 
-Lastly, there is the `NewRSA() function which returns an RSA instance and calls the `setPublicKey()` and `setPrKey()` functions. 
+Lastly, there is the `NewRSA()` function which returns an RSA instance and calls the `setPublicKey()` and `setPrKey()` functions. 
 ```golang
 // NewRSA creates and returns a RSA cipher.
 func NewRSA() (RSA, error) {
@@ -182,7 +182,7 @@ func NewRSA() (RSA, error) {
 ```
 
 
-The client represented by the main.go, tests the implementation by creating a list of objects of the Cipher interface type. It calls the `rsa.NewRSA()` function and appends the `rsaCipher` to the list. Then it the Encrypt() and Decrypt() methods of the instance are called.
+The client represented by the main.go, tests the implementation by creating a list of objects of the Cipher interface type. It calls the `rsa.NewRSA()` function and appends the `rsaCipher` to the list. Then it calls the Encrypt() and Decrypt() methods of the instance.
 
 ```golang
 //The list composed of objects that correspond to the Cipher interface
