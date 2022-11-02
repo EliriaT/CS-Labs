@@ -17,3 +17,6 @@
 
 [Laboratory Work #2](https://github.com/EliriaT/CS-Labs/tree/main/streamBlockCipher)
 
+[Laboratory Work #3](https://github.com/EliriaT/CS-Labs/tree/main/asymetricCipher)
+
+
