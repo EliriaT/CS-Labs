@@ -13,7 +13,7 @@ type PublicKey struct {
 	phi int64
 }
 
-func (pk *PublicKey) SetPublicKey() {
+func (pk *PublicKey) setPublicKey() {
 
 	lenPrimes := len(Primes)
 	pInd := rand.Intn(lenPrimes)
@@ -43,7 +43,7 @@ type PrivateKey struct {
 	d         int64 // private exponent
 }
 
-func (pk *PrivateKey) SetPrKey(publicKey PublicKey) error {
+func (pk *PrivateKey) setPrKey(publicKey PublicKey) error {
 	pk.PublicKey = publicKey
 
 	//d is modular inverse of e mod phi
@@ -99,7 +99,6 @@ func (r RSA) Decrypt(src []int64) ([]byte, error) {
 		decMessage = decMessage.Exp(decMessage, new(big.Int).SetInt64(r.d), new(big.Int).SetInt64(r.N))
 		decBytes = append(decBytes, decMessage.Bytes()[0])
 	}
-
 	return decBytes, nil
 }
 func (r RSA) Name() string {
@@ -109,7 +108,7 @@ func (r RSA) Name() string {
 // NewRSA creates and returns a RSA cipher.
 func NewRSA() (RSA, error) {
 	var cipher RSA
-	cipher.SetPublicKey()
-	cipher.SetPrKey(cipher.PublicKey)
+	cipher.setPublicKey()
+	cipher.setPrKey(cipher.PublicKey)
 	return cipher, nil
 }

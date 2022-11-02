@@ -21,7 +21,7 @@ func main() {
 	Message := []byte("i am irina.")
 
 	for i, cipher := range cipherList {
-		fmt.Println(i+1, ") ", " Message: ", string(Message), ". Encrypted using: ", cipher.Name())
+		fmt.Println(i+1, ") ", "Message: ", string(Message), ". Encrypted using: ", cipher.Name())
 		encryptedMessage, _ := cipher.Encrypt(Message)
 		fmt.Println("The encrypted message: ", encryptedMessage)
 		decryptedMessage, _ := cipher.Decrypt(encryptedMessage)
