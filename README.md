@@ -19,4 +19,6 @@
 
 [Laboratory Work #3](https://github.com/EliriaT/CS-Labs/tree/main/asymetricCipher)
 
+[Laboratory Work #4](https://github.com/EliriaT/CS-Labs/tree/main/hash)
+
 
