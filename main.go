@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/base32"
 	"fmt"
-	"github.com/EliriaT/CS-Labs/hash/message"
-	"github.com/EliriaT/CS-Labs/hash/user"
+	"github.com/EliriaT/CS-Labs/api/config"
+	"github.com/EliriaT/CS-Labs/api/db"
+	"github.com/EliriaT/CS-Labs/api/server"
+	"github.com/EliriaT/CS-Labs/api/service"
 	"log"
 	"math/rand"
 	"time"
@@ -12,39 +15,27 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	userService := user.NewUserService(user.NewStore())
+	random := make([]byte, 10)
+	rand.Read(random)
+	secret := base32.StdEncoding.EncodeToString(random)
+	fmt.Println(secret)
 
-	// Registering a user
-	err := userService.Register("irina", "averysecretpasswordandnoonecanfinditofcourse")
+	service.MakeCiphers()
+
+	configuration := config.LoadConfig()
+
+	store := db.NewStore()
+
+	apiServer, err := server.NewServer(store, configuration, service.NewServerService(store))
+
 	if err != nil {
-		log.Fatal("Something went wrong: ", err.Error())
+		log.Fatal("cannot create new server: ", err)
 	}
 
-	// Logining the user. Inside, the password is checked by comparing with its stored hash
-	loggedUser, err := userService.Login("irina", "averysecretpasswordandnoonecanfinditofcourse")
+	log.Println("Server is starting...")
+	err = apiServer.Start(configuration.ServerAddress)
+
 	if err != nil {
-		log.Fatal("Something went wrong: ", err.Error())
+		log.Fatal("server can not be started. ", err)
 	}
-
-	// Representing the hash form of the password
-	hashedPassword := loggedUser.Password
-	fmt.Println("The hashed password of the user is: ", hashedPassword)
-
-	// Getting an input message of the user from the terminal
-	messageService := message.NewMessageService()
-	messageService.GetMessageFromUser(&loggedUser)
-
-	// Signing the message and getting back the signature and the hashedMessage
-	signature, hashedBytesMessage, err := messageService.SignMessage(loggedUser.Message)
-	if err != nil {
-		log.Fatal("Something went wrong: ", err.Error())
-	}
-
-	// Checking the signature
-	err = messageService.VerifyMessage(hashedBytesMessage, signature)
-	if err != nil {
-		log.Fatal("Message is not valid! ")
-	}
-	log.Println("The signature is valid. ")
-
 }

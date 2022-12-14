@@ -8,7 +8,7 @@ type Pad struct {
 }
 
 // NewPad creates a new "one-time pad" by accepting arbitrary bytes from the
-// user and setting up pages from it. This method also allows passing the
+// hash and setting up pages from it. This method also allows passing the
 // page pointer value to make resuming an existing pad easy.
 func NewPad(material []byte, pageSize int, startPage int) (*Pad, error) {
 	// A zero-length page would cause this routine to loop infinitely

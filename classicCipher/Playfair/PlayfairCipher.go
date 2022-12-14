@@ -2,7 +2,7 @@ package Playfair
 
 import (
 	"fmt"
-	"github.com/EliriaT/CS-Labs/classicCipher/implementations"
+	"github.com/EliriaT/CS-Labs/classicCipher/Vigener"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ func (p *PlayfairCipher) SetKey(key string) {
 }
 
 func (p *PlayfairCipher) ParseKey(key string) {
-	key = implementations.cleanString(key)
+	key = Vigener.CleanString(key)
 	key = strings.Replace(key, "J", "I", -1)
 	p.key = key
 
@@ -43,7 +43,7 @@ func (p *PlayfairCipher) makeCipherTable() {
 
 func (p PlayfairCipher) Encrypt(text string) string {
 
-	text = implementations.cleanString(text)
+	text = Vigener.CleanString(text)
 	length := len(text)/2 + len(text)%2
 
 	for i := 0; i < (length - 1); i++ {

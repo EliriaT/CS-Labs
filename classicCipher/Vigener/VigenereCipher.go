@@ -16,7 +16,7 @@ func (v VigenereCipher) decodeChar(a, b rune) rune {
 }
 
 func (v VigenereCipher) Encrypt(text string) string {
-	msg, key := cleanString(text), cleanString(v.key)
+	msg, key := CleanString(text), CleanString(v.key)
 	out := make([]rune, 0, len(msg))
 	for i, c := range msg {
 		out = append(out, v.encodeChar(c, rune(key[i%len(key)])))
@@ -25,7 +25,7 @@ func (v VigenereCipher) Encrypt(text string) string {
 }
 
 func (v VigenereCipher) Decrypt(text string) string {
-	msg, key := cleanString(text), cleanString(v.key)
+	msg, key := CleanString(text), CleanString(v.key)
 	out := make([]rune, 0, len(msg))
 	for i, c := range msg {
 
@@ -38,7 +38,7 @@ func (v VigenereCipher) Name() string {
 	return "Vigenere Cipher"
 }
 
-func cleanString(in string) string {
+func CleanString(in string) string {
 	out := []rune{}
 	for _, v := range in {
 		if 65 <= v && v <= 90 {

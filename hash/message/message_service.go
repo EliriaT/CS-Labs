@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"crypto/ecdsa"
 	"fmt"
-	"github.com/EliriaT/CS-Labs/hash/user"
+	"github.com/EliriaT/CS-Labs/hash/hash"
 	"github.com/ethereum/go-ethereum/crypto"
 	"log"
 )
 
 type MessageService interface {
-	GetMessageFromUser(loggedUser *user.User)
+	GetMessageFromUser(loggedUser *hash.User)
 	SignMessage(msg string) ([]byte, []byte, error)
 	VerifyMessage(hashedMessage, signature []byte) error
 }
@@ -19,7 +19,7 @@ type messageService struct {
 	privateKey *ecdsa.PrivateKey
 }
 
-func (m messageService) GetMessageFromUser(loggedUser *user.User) {
+func (m messageService) GetMessageFromUser(loggedUser *hash.User) {
 	var inputMessage string
 	fmt.Println("Enter your message please : ")
 	fmt.Scanln(&inputMessage)
