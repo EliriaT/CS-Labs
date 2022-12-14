@@ -496,6 +496,10 @@ The Gin Web Framework was used for creating the API and implementing HTTP handle
 
 ![image](https://user-images.githubusercontent.com/67596753/207698197-85577d1b-3b8b-491c-ae3c-2be45ee791e2.png)<br />
 
+13 If the user didn't pass the Two Factor Authentication  and tries to used the first token retrieved after submiting the username and the password, he/she will get an error. The user is not authorized.
+![image](https://user-images.githubusercontent.com/67596753/207707113-f62182f5-8e27-48cc-b52f-a617f487221b.png)
+
+
 
 ## Conclusions:
 In this laboratory worked I practiced to create an authentication and authorization system that allows logined in users to access certain web services (ciphers).
