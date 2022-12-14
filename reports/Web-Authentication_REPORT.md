@@ -182,8 +182,7 @@ The way local PASETOs are created is simple:
    - The payload of the token (all the JSON data) is then encrypted using XChaCha20-Poly1305 (authenticated encryption), using the secret key along with the pre-authentication string to ensure the integrity of the PASETO
    - Finally, a token string is created of the form v2.local.payload.optional_footer
  
-The token payload is defined in `payload.go` and has a field `Username` to mark to whom  the token belongs, and `Authenticated` to mark if the user
-passed the second authentication factor (TOTP).
+The token payload is defined in `payload.go` and has a field `Username` to mark to whom  the token belongs, and `Authenticated` to mark if the user passed  succesfully the second authentication factor (TOTP).
 
 ```golang
 // Payload contains the payload data of the token
@@ -211,7 +210,7 @@ func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (stri
 	return p.paseto.Encrypt(p.symmetricKey, payload, nil)
 }
 ```
-This method is used the mark that the user passed the second authentication factor, which is TOTP.
+This method is used the mark with `true` that the user passed succesfully the second authentication factor, which is TOTP.
 ```golang
 // AuthentificateToken marks authentitcated field in the token payload as true, after 2fa is succesful,
 func (p *PasetoMaker) AuthentificateToken(payload Payload) (string, error) {
