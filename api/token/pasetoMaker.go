@@ -2,7 +2,6 @@ package token
 
 import (
 	"fmt"
-	"github.com/EliriaT/CS-Labs/api/db"
 	"github.com/o1egl/paseto"
 	"golang.org/x/crypto/chacha20poly1305"
 	"time"
@@ -14,9 +13,9 @@ type PasetoMaker struct {
 	symmetricKey []byte
 }
 
-// CreateToken creates a new token for a specific hash with unique email,
-func (p *PasetoMaker) CreateToken(username string, cipherGroup db.CipherChoice, duration time.Duration) (string, error) {
-	payload, err := NewPayload(username, cipherGroup, duration)
+// CreateToken creates a new token for a specific hash with unique username,
+func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (string, error) {
+	payload, err := NewPayload(username, duration)
 	if err != nil {
 		return "", err
 	}
@@ -24,8 +23,8 @@ func (p *PasetoMaker) CreateToken(username string, cipherGroup db.CipherChoice, 
 	return p.paseto.Encrypt(p.symmetricKey, payload, nil)
 }
 
-// AuthentificateToken marks authentitcated field in the token payload as true, after 2fa is succesful,
-func (p *PasetoMaker) AuthentificateToken(payload Payload) (string, error) {
+// AuthenticateToken marks authentitcated field in the token payload as true, after 2fa is succesful,
+func (p *PasetoMaker) AuthenticateToken(payload Payload) (string, error) {
 
 	payload.Authenticated = true
 
@@ -41,10 +40,10 @@ func (p *PasetoMaker) VerifyToken(token string) (*Payload, error) {
 		return nil, ErrInvalidToken
 	}
 
-	//err = payload.Valid()
-	//if err != nil {
-	//	return nil, err
-	//}
+	err = payload.Valid()
+	if err != nil {
+		return nil, err
+	}
 	return payload, nil
 }
 

@@ -83,7 +83,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := server.tokenMaker.CreateToken(user.Username, user.Choice, server.config.AccessTokenDuration)
+	accessToken, err := server.tokenMaker.CreateToken(user.Username, server.config.AccessTokenDuration)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
@@ -116,11 +116,11 @@ func (server *Server) twoFactorLoginUser(ctx *gin.Context) {
 
 	user, err := server.serv.CheckTOTP(authPayload.Username, req.Totp)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(err))
 		return
 	}
 
-	authToken, err := server.tokenMaker.AuthentificateToken(*authPayload)
+	authToken, err := server.tokenMaker.AuthenticateToken(*authPayload)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
@@ -155,7 +155,11 @@ func (server *Server) createMessage(ctx *gin.Context) {
 
 	message, err := server.serv.StoreAndEncryptMessage(authPayload.Username, req.Message, int(choice))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		if err == service.ErrEncryption || err == service.ErrUUID {
+			ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(err))
 		return
 	}
 
@@ -169,7 +173,7 @@ func (server *Server) getUserMessageByID(ctx *gin.Context) {
 
 	message, err := server.serv.GetMessageFromDB(authPayload.Username, uuid.MustParse(messageID))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(err))
 		return
 	}
 
@@ -182,7 +186,7 @@ func (server *Server) getMessagesOfUser(ctx *gin.Context) {
 
 	messages, err := server.serv.GetMessagesOfUser(authPayload.Username)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(err))
 		return
 	}
 

@@ -2,7 +2,6 @@ package token
 
 import (
 	"errors"
-	"github.com/EliriaT/CS-Labs/api/db"
 	"github.com/google/uuid"
 	"time"
 )
@@ -20,7 +19,6 @@ type Payload struct {
 	Authenticated bool      `json:"authenticated"`
 	IssuedAt      time.Time `json:"issued_at"`
 	ExpiredAt     time.Time `json:"expired_at"`
-	//jwt.RegisteredClaims
 }
 
 // Valid checks if the token payload is valid or not
@@ -31,7 +29,7 @@ func (payload *Payload) Valid() error {
 	return nil
 }
 
-func NewPayload(username string, cipherGroup db.CipherChoice, duration time.Duration) (*Payload, error) {
+func NewPayload(username string, duration time.Duration) (*Payload, error) {
 	tokenId, err := uuid.NewRandom()
 	if err != nil {
 		return nil, err

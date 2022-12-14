@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/base32"
-	"fmt"
 	"github.com/EliriaT/CS-Labs/api/config"
 	"github.com/EliriaT/CS-Labs/api/db"
 	"github.com/EliriaT/CS-Labs/api/server"
@@ -14,11 +12,6 @@ import (
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-
-	random := make([]byte, 10)
-	rand.Read(random)
-	secret := base32.StdEncoding.EncodeToString(random)
-	fmt.Println(secret)
 
 	service.MakeCiphers()
 
