@@ -502,7 +502,7 @@ The Gin Web Framework was used for creating the API and implementing HTTP handle
 
 
 ## Conclusions:
-In this laboratory worked I practiced to create an authentication and authorization system that allows logined in users to access certain web services (ciphers).
+In this laboratory work I practiced to create an authentication and authorization system that allows logined in users to access certain web services (ciphers).
 I learned how to create a second factor authentication system using Time based One Time Password as described in RFC 6238 and
 in a Google Authenticator compatible manner.
 I learned that when a user loses access to their TOTP device, they would no longer have access to their account. 
