@@ -21,4 +21,4 @@
 
 [Laboratory Work #4](https://github.com/EliriaT/CS-Labs/tree/main/hash)
 
-
+[Laboratory Work #5](https://github.com/EliriaT/CS-Labs/tree/main/api)
